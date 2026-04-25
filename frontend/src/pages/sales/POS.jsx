@@ -22,7 +22,7 @@ export default function POS() {
   const [receipt,        setReceipt]        = useState(null); // completed order
   const [orderError,     setOrderError]     = useState(null);
 
-  // ── Load products ────────────────────────────────────────────────────────
+  
   useEffect(() => {
     api.list("/products/", { page_size: 100, is_active: true })
       .then(data => setProducts(data.results ?? data))
@@ -37,7 +37,7 @@ export default function POS() {
     );
   }, [products, search]);
 
-  // ── Cart helpers ─────────────────────────────────────────────────────────
+
   function addToCart(product) {
     if (product.stock <= 0) return;
     setCart(prev => {
@@ -72,7 +72,7 @@ export default function POS() {
   function removeFromCart(id) { setCart(prev => prev.filter(i => i.id !== id)); }
   function clearCart() { setCart([]); setAmountPaid(""); setDiscount(0); setOrderError(null); }
 
-  // ── Totals ───────────────────────────────────────────────────────────────
+ 
   const totals = useMemo(() => {
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const taxTotal = cart.reduce((s, i) => s + (i.price * i.qty * i.tax_rate) / 100, 0);
@@ -195,7 +195,7 @@ export default function POS() {
                         opacity: outOfStock ? 0.45 : 1,
                       }}>
                       <div style={{ fontSize:"0.72rem", color:"var(--muted)" }}>{p.category_name || p.category}</div>
-                      <div style={{ fontSize:"0.85rem", fontWeight:500, margin:"0.1rem 0" }}>{p.name}</div>
+                      <div style={{ fontSize:"0.85rem", fontWeight:500, margin:"0.1rem 0", color:"burlywood" }}>{p.name}</div>
                       <div style={{ fontSize:"0.8rem", color:"var(--primary)" }}>{formatCurrencyNPR(p.price)}</div>
                       <div style={{ fontSize:"0.7rem", color: p.stock <= p.reorder_level ? "var(--warning)" : "var(--muted)", marginTop:"0.1rem" }}>
                         Stock: {p.stock}
