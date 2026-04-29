@@ -1,8 +1,6 @@
 from django.db import models
-
-
 class CompanyProfile(models.Model):
-    """Singleton — only ever one row."""
+    # Singleton
     name              = models.CharField(max_length=255, default="My Store")
     tagline           = models.CharField(max_length=255, blank=True)
     address           = models.TextField(blank=True)
@@ -42,8 +40,8 @@ class TaxConfig(models.Model):
     updated_at        = models.DateTimeField(auto_now=True)
 
     class Meta:
-        db_table    = "settings_taxconfig"
-        verbose_name        = "Tax Configuration"
+        db_table = "settings_taxconfig"
+        verbose_name  = "Tax Configuration"
         verbose_name_plural = "Tax Configuration"
 
     def __str__(self):
@@ -66,7 +64,7 @@ class NotificationConfig(models.Model):
 
     class Meta:
         db_table    = "settings_notificationconfig"
-        verbose_name        = "Notification Config"
+        verbose_name  = "Notification Config"
         verbose_name_plural = "Notification Config"
 
     def __str__(self):
