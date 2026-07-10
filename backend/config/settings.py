@@ -30,6 +30,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     "apps.accounts",
     "apps.products",
+    "apps.branches",
     "apps.inventory",
     "apps.customers",
     "apps.suppliers",
@@ -77,13 +78,13 @@ WSGI_APPLICATION = "config.wsgi.application"
 # To switch to PostgreSQL, set USE_POSTGRES=True in your .env file
 # and fill in the DB_* variables below.
 
-USE_POSTGRES = config("USE_POSTGRES", default=False, cast=bool)
+USE_POSTGRES = config("USE_POSTGRES", default=True, cast=bool)
 
 if USE_POSTGRES:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.postgresql",
-            "NAME": config("DB_NAME", default="inventory_db"),
+            "NAME": config("DB_NAME", default="smart_inventory"),
             "USER": config("DB_USER", default="postgres"),
             "PASSWORD": config("DB_PASSWORD", default=""),
             "HOST": config("DB_HOST", default="localhost"),
