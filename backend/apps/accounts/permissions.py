@@ -20,6 +20,7 @@ class IsOwnerOrManager(BasePermission):
 class IsOwnerOrManagerOrReadOnly(BasePermission):
     """Cashiers can read; managers/owners can write."""
     SAFE_METHODS = ("GET", "HEAD", "OPTIONS")
+    message = "Only owners and managers can perform this action."
 
     def has_permission(self, request, view):
         if not request.user.is_authenticated:

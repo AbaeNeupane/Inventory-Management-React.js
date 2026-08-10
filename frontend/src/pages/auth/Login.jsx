@@ -133,30 +133,6 @@ export default function Login() {
               )}
             </button>
           </form>
-
-          {/* Demo credentials hint */}
-          <div style={styles.demoBox}>
-            <div style={styles.demoTitle}>Demo credentials</div>
-            {[
-              ["Owner",   "admin@example.com",   "admin1234"],
-              ["Manager", "manager@example.com", "manager1234"],
-              ["Cashier", "cashier@example.com", "cashier1234"],
-            ].map(([role, em, pw]) => (
-              <button
-                key={role}
-                type="button"
-                style={styles.demoBtn}
-                onClick={() => {
-                  setEmail(em);
-                  setPassword(pw);
-                  clearError();
-                }}
-              >
-                <span style={styles.demoBadge}>{role}</span>
-                <span style={styles.demoEmail}>{em}</span>
-              </button>
-            ))}
-          </div>
         </div>
       </div>
     </div>

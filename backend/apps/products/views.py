@@ -1,9 +1,14 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.db import transaction
 from django.db.models import F
+from django.db.models.deletion import ProtectedError
 
+from apps.accounts.models import User
 from apps.accounts.permissions import IsOwnerOrManagerOrReadOnly
+from apps.sales.models import OrderItem
+from apps.suppliers.models import PurchaseOrderItem
 from .models import Category, Brand, Product
 from .serializers import (
     CategorySerializer,
@@ -36,6 +41,31 @@ class ProductViewSet(viewsets.ModelViewSet):
     search_fields      = ["name", "sku", "description", "category__name", "brand__name"]
     ordering_fields    = ["name", "price", "stock", "created_at"]
     ordering           = ["-created_at"]
+
+    def destroy(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return Response({"detail": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED)
+
+        is_privileged = request.user.role in {User.Role.OWNER, User.Role.MANAGER}
+        if not is_privileged:
+            return Response(
+                {"detail": "Only owners and managers can delete products."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        product = self.get_object()
+
+        try:
+            with transaction.atomic():
+                OrderItem.objects.filter(product=product).delete()
+                PurchaseOrderItem.objects.filter(product=product).delete()
+                product.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except ProtectedError:
+            return Response(
+                {"detail": "Cannot delete this product because it has existing sales history."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
     def get_serializer_class(self):
         if self.action == "list":

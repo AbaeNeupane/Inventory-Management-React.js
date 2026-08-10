@@ -78,7 +78,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 # To switch to PostgreSQL, set USE_POSTGRES=True in your .env file
 # and fill in the DB_* variables below.
 
-USE_POSTGRES = config("USE_POSTGRES", default=True, cast=bool)
+USE_POSTGRES = config("USE_POSTGRES", default=False, cast=bool)
 
 if USE_POSTGRES:
     DATABASES = {
